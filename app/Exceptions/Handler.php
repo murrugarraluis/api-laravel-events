@@ -2,7 +2,11 @@
 
 namespace App\Exceptions;
 
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Spatie\Permission\Exceptions\UnauthorizedException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -26,5 +30,29 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
+    }
+    public function render($request, Exception|Throwable $e)
+    {
+//        if ($e instanceof UnauthorizedException) {
+//            return response()->json([
+//                "message" => "User does not have the right permissions."
+//            ], 403);
+//        }
+        if ($e instanceof ModelNotFoundException) {
+            return new JsonResponse([
+                'message' => "{$this->prettyModelNotFound($e)} not found."
+            ], 404);
+        }
+
+        return parent::render($request, $e);
+    }
+
+    private function prettyModelNotFound(ModelNotFoundException $exception): string
+    {
+        if (!is_null($exception->getModel())) {
+            return (ltrim(preg_replace('/[A-Z]/', ' $0', class_basename($exception->getModel()))));
+        }
+
+        return 'resource';
     }
 }
