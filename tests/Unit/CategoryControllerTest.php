@@ -5,6 +5,8 @@ namespace Tests\Unit;
 use App\Models\Category;
 use App\Models\User;
 use Database\Seeders\CategorySeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -26,7 +28,13 @@ class CategoryControllerTest extends TestCase
 
     public function seedData(): void
     {
-        User::factory()->create();
+        $this->seed(PermissionSeeder::class);
+        $this->seed(RoleSeeder::class);
+        User::factory()->create([
+            'name' => 'Administrador',
+            'email' => 'admin@app.com',
+            'password' => bcrypt('123456')
+        ])->assignRole('admin');
         $this->seed(CategorySeeder::class);
     }
 

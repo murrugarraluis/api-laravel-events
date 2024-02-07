@@ -26,13 +26,23 @@ Route::prefix('v1')->group(function () {
 
     Route::get('categories', [CategoryController::class, 'index']);
     Route::get('categories/{category}', [CategoryController::class, 'show']);
-    Route::post('categories', [CategoryController::class, 'store']);
-    Route::put('categories/{category}', [CategoryController::class, 'update']);
-    Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
 
     Route::get('events', [EventController::class, 'index']);
     Route::get('events/{event}', [EventController::class, 'show']);
-    Route::post('events', [EventController::class, 'store']);
-    Route::put('events/{event}', [EventController::class, 'update']);
-    Route::delete('events/{event}', [EventController::class, 'destroy']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('categories', [CategoryController::class, 'store'])
+            ->middleware('permission:create categories');
+        Route::put('categories/{category}', [CategoryController::class, 'update'])
+            ->middleware('permission:update categories');
+        Route::delete('categories/{category}', [CategoryController::class, 'destroy'])
+            ->middleware('permission:destroy categories');
+
+        Route::post('events', [EventController::class, 'store'])
+            ->middleware('permission:create events');
+        Route::put('events/{event}', [EventController::class, 'update'])
+            ->middleware('permission:update events');
+        Route::delete('events/{event}', [EventController::class, 'destroy'])
+            ->middleware('permission:destroy events');
+    });
 });

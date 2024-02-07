@@ -6,6 +6,8 @@ use App\Models\Event;
 use App\Models\User;
 use Database\Seeders\CategorySeeder;
 use Database\Seeders\EventSeeder;
+use Database\Seeders\PermissionSeeder;
+use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -37,7 +39,13 @@ class EventControllerTest extends TestCase
 
     public function seedData(): void
     {
-        User::factory()->create();
+        $this->seed(PermissionSeeder::class);
+        $this->seed(RoleSeeder::class);
+        User::factory()->create([
+            'name' => 'Administrador',
+            'email' => 'admin@app.com',
+            'password' => bcrypt('123456')
+        ])->assignRole('admin');
         $this->seed(CategorySeeder::class);
         $this->seed(EventSeeder::class);
     }

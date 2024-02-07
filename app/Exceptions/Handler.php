@@ -33,11 +33,11 @@ class Handler extends ExceptionHandler
     }
     public function render($request, Exception|Throwable $e)
     {
-//        if ($e instanceof UnauthorizedException) {
-//            return response()->json([
-//                "message" => "User does not have the right permissions."
-//            ], 403);
-//        }
+        if ($e instanceof UnauthorizedException) {
+            return response()->json([
+                "message" => "User does not have the right permissions."
+            ], 403);
+        }
         if ($e instanceof ModelNotFoundException) {
             return new JsonResponse([
                 'message' => "{$this->prettyModelNotFound($e)} not found."
