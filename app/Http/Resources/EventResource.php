@@ -24,7 +24,8 @@ class EventResource extends JsonResource
             'poster' => $this->poster,
             'date' => $this->date,
             'time' => $this->time,
-            'category' => new CategoryResource($this->category)
+            'category' => new CategoryResource($this->category),
+            'city' => new CityResource($this->city)
         ];
     }
 }

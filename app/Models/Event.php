@@ -19,11 +19,16 @@ class Event extends Model
         'poster',
         'date',
         'time',
-        'category_id'
+        'category_id',
+        'city_id'
     ];
-    protected $with = ['category'];
+    protected $with = ['category','city'];
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
     }
 }

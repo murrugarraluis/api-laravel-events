@@ -20,6 +20,7 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('123456')
         ])->assignRole('admin');
         $this->call(CategorySeeder::class);
+        $this->call(CitySeeder::class);
         $this->call(EventSeeder::class);
     }
 }

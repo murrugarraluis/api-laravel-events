@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CityController;
 use App\Http\Controllers\EventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -30,6 +31,9 @@ Route::prefix('v1')->group(function () {
     Route::get('events', [EventController::class, 'index']);
     Route::get('events/{event}', [EventController::class, 'show']);
 
+    Route::get('cities', [CityController::class, 'index']);
+    Route::get('cities/{city}', [CityController::class, 'show']);
+
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('categories', [CategoryController::class, 'store'])
             ->middleware('permission:create categories');
@@ -44,5 +48,12 @@ Route::prefix('v1')->group(function () {
             ->middleware('permission:update events');
         Route::delete('events/{event}', [EventController::class, 'destroy'])
             ->middleware('permission:destroy events');
+
+        Route::post('cities', [CityController::class, 'store'])
+            ->middleware('permission:create cities');
+        Route::put('cities/{city}', [CityController::class, 'update'])
+            ->middleware('permission:update cities');
+        Route::delete('cities/{city}', [CityController::class, 'destroy'])
+            ->middleware('permission:destroy cities');
     });
 });

@@ -25,6 +25,7 @@ class EventFactory extends Factory
             'date' => $this->faker->date(),
             'time' => $this->faker->time(),
             'category_id' => $this->faker->numberBetween(1, 2),
+            'city_id' => $this->faker->numberBetween(1, 4),
         ];
     }
 }

@@ -12,7 +12,6 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class EventController extends Controller
 {
@@ -39,7 +38,8 @@ class EventController extends Controller
                 'poster' => $request->input('poster'),
                 'date' => $request->input('date'),
                 'time' => $request->input('time'),
-                'category_id' => $request->input('category.id')
+                'category_id' => $request->input('category.id'),
+                'city_id' => $request->input('city.id')
             ]);
             DB::commit();
             return (new EventResource($event))->additional([
@@ -66,7 +66,8 @@ class EventController extends Controller
                 'poster' => $request->input('poster'),
                 'date' => $request->input('date'),
                 'time' => $request->input('time'),
-                'category_id' => $request->input('category.id')
+                'category_id' => $request->input('category.id'),
+                'city_id' => $request->input('city.id')
             ]);
             $event->save();
             DB::commit();

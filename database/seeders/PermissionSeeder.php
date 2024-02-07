@@ -20,5 +20,9 @@ class PermissionSeeder extends Seeder
         Permission::create(['name'=>'create events']);
         Permission::create(['name'=>'update events']);
         Permission::create(['name'=>'destroy events']);
+
+        Permission::create(['name'=>'create cities']);
+        Permission::create(['name'=>'update cities']);
+        Permission::create(['name'=>'destroy cities']);
     }
 }

@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->date('date');
             $table->time('time');
             $table->foreignId('category_id')->constrained('categories')->cascadeOnDelete();
+            $table->foreignId('city_id')->constrained('cities');
             $table->timestamps();
             $table->softDeletes();
         });

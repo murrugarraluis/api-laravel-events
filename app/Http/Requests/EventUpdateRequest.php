@@ -30,7 +30,10 @@ class EventUpdateRequest extends FormRequest
             'date' => 'required|date_format:Y-m-d',
             'time' => 'required|date_format:H:i',
             'category' => 'required|array',
-            'category.id' => 'required|integer|' . Rule::exists('categories', 'id')
+            'category.id' => 'required|integer|' . Rule::exists('categories', 'id'),
+
+            'city' => 'required|array',
+            'city.id' => 'required|integer|' . Rule::exists('cities', 'id')
         ];
     }
 }

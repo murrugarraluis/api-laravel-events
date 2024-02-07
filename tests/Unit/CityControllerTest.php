@@ -2,38 +2,23 @@
 
 namespace Tests\Unit;
 
-use App\Models\Event;
+use App\Models\Category;
+use App\Models\City;
 use App\Models\User;
 use Database\Seeders\CategorySeeder;
 use Database\Seeders\CitySeeder;
-use Database\Seeders\EventSeeder;
 use Database\Seeders\PermissionSeeder;
 use Database\Seeders\RoleSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class EventControllerTest extends TestCase
+class CityControllerTest extends TestCase
 {
     use RefreshDatabase;
-
-    private string $path = 'events';
+    private string $path = 'cities';
     private array $response = [
         'id',
-        'name',
-        'slug',
-        'content',
-        'description',
-        'poster',
-        'date',
-        'time',
-        'category' => [
-            'id',
-            'name',
-        ],
-        'city' => [
-            'id',
-            'name',
-        ],
+        'name'
     ];
 
     public function setUp(): void
@@ -51,9 +36,7 @@ class EventControllerTest extends TestCase
             'email' => 'admin@app.com',
             'password' => bcrypt('123456')
         ])->assignRole('admin');
-        $this->seed(CategorySeeder::class);
         $this->seed(CitySeeder::class);
-        $this->seed(EventSeeder::class);
     }
 
 
@@ -75,10 +58,10 @@ class EventControllerTest extends TestCase
     public function test_show(): void
     {
         $user = User::first();
-        $event = Event::first();
+        $city = City::first();
 
         $response = $this->actingAs($user)->withSession(['banned' => false])
-            ->getJson("api/v1/$this->path/$event->id");
+            ->getJson("api/v1/$this->path/$city->id");
 
         $response->assertStatus(200)
             ->assertJsonStructure(['data' => $this->response]);
@@ -88,19 +71,7 @@ class EventControllerTest extends TestCase
     {
         $user = User::first();
         $payload = [
-            'name' => 'name 1',
-            'content' => 'content 1',
-            'description' => 'description 1',
-            'poster' => 'https://www.google.com',
-            'date' => date('Y-m-d'),
-            'time' => date('H:i'),
-            'category' => [
-                'id' => 1
-            ],
-            'city' => [
-                'id' => 1
-            ],
-
+            'name' => 'city 1'
         ];
 
         $response = $this->actingAs($user)->withSession(['banned' => false])
@@ -108,7 +79,7 @@ class EventControllerTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJsonStructure(['data' => $this->response])
-            ->assertJsonFragment(['message' => 'Event created.']);
+            ->assertJsonFragment(['message' => 'City created.']);
 
     }
 
@@ -116,27 +87,16 @@ class EventControllerTest extends TestCase
     {
         $user = User::first();
         $payload = [
-            'name' => 'name 1',
-            'content' => 'content 1',
-            'description' => 'description 1',
-            'poster' => 'https://www.google.com',
-            'date' => date('Y-m-d'),
-            'time' => date('H:i'),
-            'category' => [
-                'id' => 1
-            ],
-            'city' => [
-                'id' => 1
-            ],
+            'name' => 'city 1'
         ];
-        $event = Event::first();
+        $city = City::first();
 
         $response = $this->actingAs($user)->withSession(['banned' => false])
-            ->putJson("api/v1/$this->path/$event->id", $payload);
+            ->putJson("api/v1/$this->path/$city->id", $payload);
 
         $response->assertStatus(200)
             ->assertJsonStructure(['data' => $this->response])
-            ->assertJsonFragment(['message' => 'Event updated.']);
+            ->assertJsonFragment(['message' => 'City updated.']);
 
     }
 
@@ -147,20 +107,20 @@ class EventControllerTest extends TestCase
             ->getJson("api/v1/$this->path/10000");
 
         $response->assertStatus(404)
-            ->assertExactJson(['message' => 'Event not found.']);
+            ->assertExactJson(['message' => 'City not found.']);
     }
 
     public function test_destroy(): void
     {
         $user = User::first();
-        $event = Event::first();
+        $city = City::first();
 
         $response = $this->actingAs($user)->withSession(['banned' => false])
-            ->deleteJson("api/v1/$this->path/$event->id");
+            ->deleteJson("api/v1/$this->path/$city->id");
 
         $response->assertStatus(200)
-            ->assertExactJson(["message" => 'Event deleted.']);
+            ->assertExactJson(["message" => 'City deleted.']);
 
-        $this->assertSoftDeleted('events', ['id' => $event->id]);
+        $this->assertSoftDeleted('cities', ['id' => $city->id]);
     }
 }
