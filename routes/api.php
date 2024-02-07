@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\EventController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,4 +26,10 @@ Route::prefix('v1')->group(function () {
     Route::post('categories', [CategoryController::class, 'store']);
     Route::put('categories/{category}', [CategoryController::class, 'update']);
     Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
+
+    Route::get('events', [EventController::class, 'index']);
+    Route::get('events/{event}', [EventController::class, 'show']);
+    Route::post('events', [EventController::class, 'store']);
+    Route::put('events/{event}', [EventController::class, 'update']);
+    Route::delete('events/{event}', [EventController::class, 'destroy']);
 });

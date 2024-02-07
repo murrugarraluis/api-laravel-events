@@ -2,20 +2,31 @@
 
 namespace Tests\Unit;
 
-use App\Models\Category;
+use App\Models\Event;
 use App\Models\User;
 use Database\Seeders\CategorySeeder;
+use Database\Seeders\EventSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-class CategoryControllerTest extends TestCase
+class EventControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    private string $path = 'categories';
+    private string $path = 'events';
     private array $response = [
         'id',
-        'name'
+        'name',
+        'slug',
+        'content',
+        'description',
+        'poster',
+        'date',
+        'time',
+        'category' => [
+            'id',
+            'name',
+        ],
     ];
 
     public function setUp(): void
@@ -28,6 +39,7 @@ class CategoryControllerTest extends TestCase
     {
         User::factory()->create();
         $this->seed(CategorySeeder::class);
+        $this->seed(EventSeeder::class);
     }
 
 
@@ -49,10 +61,10 @@ class CategoryControllerTest extends TestCase
     public function test_show(): void
     {
         $user = User::first();
-        $category = Category::first();
+        $event = Event::first();
 
         $response = $this->actingAs($user)->withSession(['banned' => false])
-            ->getJson("api/v1/$this->path/$category->id");
+            ->getJson("api/v1/$this->path/$event->id");
 
         $response->assertStatus(200)
             ->assertJsonStructure(['data' => $this->response]);
@@ -62,7 +74,16 @@ class CategoryControllerTest extends TestCase
     {
         $user = User::first();
         $payload = [
-            'name' => 'category 1'
+            'name' => 'name 1',
+            'content' => 'content 1',
+            'description' => 'description 1',
+            'poster' => 'https://www.google.com',
+            'date' => date('Y-m-d'),
+            'time' => date('H:i'),
+            'category' => [
+                'id' => 1
+            ],
+
         ];
 
         $response = $this->actingAs($user)->withSession(['banned' => false])
@@ -70,7 +91,7 @@ class CategoryControllerTest extends TestCase
 
         $response->assertStatus(201)
             ->assertJsonStructure(['data' => $this->response])
-            ->assertJsonFragment(['message' => 'Category created.']);
+            ->assertJsonFragment(['message' => 'Event created.']);
 
     }
 
@@ -78,16 +99,24 @@ class CategoryControllerTest extends TestCase
     {
         $user = User::first();
         $payload = [
-            'name' => 'category 1'
+            'name' => 'name 1',
+            'content' => 'content 1',
+            'description' => 'description 1',
+            'poster' => 'https://www.google.com',
+            'date' => date('Y-m-d'),
+            'time' => date('H:i'),
+            'category' => [
+                'id' => 1
+            ]
         ];
-        $category = Category::first();
+        $event = Event::first();
 
         $response = $this->actingAs($user)->withSession(['banned' => false])
-            ->putJson("api/v1/$this->path/$category->id", $payload);
+            ->putJson("api/v1/$this->path/$event->id", $payload);
 
         $response->assertStatus(200)
             ->assertJsonStructure(['data' => $this->response])
-            ->assertJsonFragment(['message' => 'Category updated.']);
+            ->assertJsonFragment(['message' => 'Event updated.']);
 
     }
 
@@ -98,20 +127,20 @@ class CategoryControllerTest extends TestCase
             ->getJson("api/v1/$this->path/10000");
 
         $response->assertStatus(404)
-            ->assertExactJson(['message' => 'Category not found.']);
+            ->assertExactJson(['message' => 'Event not found.']);
     }
 
     public function test_destroy(): void
     {
         $user = User::first();
-        $category = Category::first();
+        $event = Event::first();
 
         $response = $this->actingAs($user)->withSession(['banned' => false])
-            ->deleteJson("api/v1/$this->path/$category->id");
+            ->deleteJson("api/v1/$this->path/$event->id");
 
         $response->assertStatus(200)
-            ->assertExactJson(["message" => 'Category deleted.']);
+            ->assertExactJson(["message" => 'Event deleted.']);
 
-        $this->assertDatabaseMissing('categories', ['id' => $category->id]);
+        $this->assertSoftDeleted('events', ['id' => $event->id]);
     }
 }
