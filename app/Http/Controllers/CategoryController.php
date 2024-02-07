@@ -6,6 +6,7 @@ use App\Http\Requests\CategoryCreateRequest;
 use App\Http\Requests\CategoryUpdateRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class CategoryController extends Controller
@@ -38,11 +39,9 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function destroy(Category $category): CategoryResource
+    public function destroy(Category $category): JsonResponse
     {
         $category->delete();
-        return (new CategoryResource($category))->additional([
-            'message' => 'Category deleted.'
-        ]);
+        return response()->json(['message' => 'Category deleted.']);
     }
 }
