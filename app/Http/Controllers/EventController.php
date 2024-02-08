@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 class EventController extends Controller
 {
     const per_page = 12;
-    const sort = 'desc';
+    const sort = 'asc';
 
     public function index(EventIndexRequest $request): AnonymousResourceCollection
     {
