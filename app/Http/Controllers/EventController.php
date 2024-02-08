@@ -72,8 +72,11 @@ class EventController extends Controller
         return EventResource::collection($events);
     }
 
-    public function show(Event $event): EventResource
+    public function show($id): EventResource
     {
+        $event = Event::where('id',$id)
+            ->orWhere('slug',$id)
+            ->firstOrFail();
         return new EventResource($event);
     }
 

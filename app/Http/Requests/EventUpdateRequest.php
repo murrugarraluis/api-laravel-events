@@ -28,7 +28,7 @@ class EventUpdateRequest extends FormRequest
             'description' => 'nullable|string',
             'poster' => 'required|url',
             'date' => 'required|date_format:Y-m-d',
-            'time' => 'required|date_format:H:i',
+            'time' => 'required|date_format:H:i:s',
             'category' => 'required|array',
             'category.id' => 'required|integer|' . Rule::exists('categories', 'id'),
 

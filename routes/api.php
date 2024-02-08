@@ -33,7 +33,7 @@ Route::prefix('v1')->group(function () {
     Route::get('categories/{category}', [CategoryController::class, 'show']);
 
     Route::get('events', [EventController::class, 'index']);
-    Route::get('events/{event}', [EventController::class, 'show']);
+    Route::get('events/{id}', [EventController::class, 'show']);
 
     Route::get('cities', [CityController::class, 'index']);
     Route::get('cities/{city}', [CityController::class, 'show']);
