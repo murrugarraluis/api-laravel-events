@@ -58,7 +58,8 @@ class EventController extends Controller
                 $query->whereRaw('LOWER(name) LIKE ?', ['%' . $searchTerm . '%']);
             });
         }
-        $query->orderByRaw("date $sort, time $sort");
+        $query->orderBy("date")
+            ->orderBy('id');
         $events = $query->paginate($per_page);
         $events->appends([
             'per_page' => ($per_page !== self::per_page) ? $per_page : null,
@@ -74,8 +75,8 @@ class EventController extends Controller
 
     public function show($id): EventResource
     {
-        $event = Event::where('id',$id)
-            ->orWhere('slug',$id)
+        $event = Event::where('id', $id)
+            ->orWhere('slug', $id)
             ->firstOrFail();
         return new EventResource($event);
     }
